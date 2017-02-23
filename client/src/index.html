@@ -1,0 +1,164 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="index.css">
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script>
+			$( function() {
+				$( ".map-container" ).resizable({
+					start: function (e, ui) {
+						
+					},
+					resize: function (e, ui) {
+						console.log($(".map-container")[0].style['height']);
+						changeElementSizingToPercents(ui.element);
+						//console.log($(ui.element).width());
+
+						var mapPercentWidth = ui.element[0].style['width'].slice(0, -1)
+						
+						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
+						var leftPercentWidth = $("#leftbar")[0].style['width'].slice(0, -1);
+						var difference = 100 - mapPercentWidth - rightPercentWidth - leftPercentWidth;
+						if(rightPercentWidth < 5)
+						{
+							 $(this).resizable("option", "maxWidth", ui.size.width); 
+						}
+
+						$('#rightbar').css("width", parseFloat(rightPercentWidth) + parseFloat(difference) + "%")
+						//$('#second').css("height", height- first+ "px");
+
+						
+						var mapPercentHeight = parseFloat(ui.element[0].style['height'].slice(0, -1));
+						var topbarPercentHeight = parseFloat( $("#topbar")[0].style['height'].slice(0, -1) );
+						var bottombarPercentHeight = parseFloat( $("#bottombar")[0].style['height'].slice(0, -1) );
+						var difference = 100 - mapPercentHeight - topbarPercentHeight - bottombarPercentHeight;
+						if(bottombarPercentHeight < 5)
+						{
+							 $(this).resizable("option", "maxHeight", ui.size.height); 
+						}
+
+						$('#bottombar').css("height", bottombarPercentHeight + difference + "%");
+
+						$('#rightbar').css("height", mapPercentHeight +"%");
+						$('#leftbar').css("height", mapPercentHeight + "%");
+
+					},
+					stop: function(e, ui) {
+						changeElementSizingToPercents(ui.element);
+						var mapPercentWidth = ui.element[0].style['width'].slice(0, -1)
+						
+						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
+						var leftPercentWidth = $("#leftbar")[0].style['width'].slice(0, -1);
+						var difference = 100 - mapPercentWidth - rightPercentWidth - leftPercentWidth;
+						console.log(difference);
+						if(difference < 0)
+							$('#rightbar').css("width", parseFloat(rightPercentWidth) + parseFloat(difference) + "%")
+						$(this).resizable("option", "maxWidth", null);
+					}
+				});
+				$( ".diary" ).resizable({
+					resize: function (e, ui) {
+						changeElementSizingToPercents(ui.element);
+						//console.log($(ui.element).width());
+						var leftPercentWidth = ui.element[0].style['width'].slice(0, -1)
+						
+						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
+						var mapPercentWidth = $(".map-container")[0].style['width'].slice(0, -1);
+						var difference = 100 - parseFloat(mapPercentWidth) - parseFloat(rightPercentWidth) - parseFloat(leftPercentWidth);
+						if(mapPercentWidth < 5)
+						{
+							 $(this).resizable("option", "maxWidth", ui.size.width); 
+						}
+
+						$('.map-container').css("width", parseFloat(mapPercentWidth) + parseFloat(difference) + "%")
+						//$('#second').css("height", height- first+ "px");
+
+						var leftPercentHeight = parseFloat(ui.element[0].style['height'].slice(0, -1));
+						var topbarPercentHeight = parseFloat( $("#topbar")[0].style['height'].slice(0, -1) );
+						var bottombarPercentHeight = parseFloat( $("#bottombar")[0].style['height'].slice(0, -1) );
+						var difference = 100 - leftPercentHeight - topbarPercentHeight - bottombarPercentHeight;
+						if(bottombarPercentHeight < 5)
+						{
+							 $(this).resizable("option", "maxHeight", ui.size.height); 
+						}
+
+						$('#bottombar').css("height", bottombarPercentHeight + difference + "%");
+
+						$('#rightbar').css("height", leftPercentHeight +"%");
+						$('.map-container').css("height", leftPercentHeight + "%");
+					},
+					stop: function(e, ui) {
+						changeElementSizingToPercents(ui.element);
+						var leftPercentWidth = ui.element[0].style['width'].slice(0, -1)
+						
+						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
+						var mapPercentWidth = $(".map-container")[0].style['width'].slice(0, -1);
+						var difference = 100 - mapPercentWidth - rightPercentWidth - leftPercentWidth;
+						console.log(difference);
+						if(difference < 0)
+							$('#rightbar').css("width", parseFloat(rightPercentWidth) + parseFloat(difference) + "%")
+						$(this).resizable("option", "maxWidth", null);
+					}
+				});
+
+				function changeElementSizingToPercents(element){
+					var parent = element.parent();
+						element.css({
+							width: element.width()/parent.width()*100+"%",
+							height: element.height()/parent.height()*100+"%"
+					});
+				}
+			});
+	</script>
+	</head>
+	<body>
+		<div class="userbox topbar" id="topbar" style="height:10%;">
+			<div id='leftside-topbar'>
+				<div class="dropdown-container">
+					<div class="dropdown-button">Life</div>
+					<div class="dropdown-button">Edit</div>
+					<div class="dropdown-button">Actions</div>
+					<div class="dropdown-button">View</div>
+					<div class="dropdown-button">Help</div>
+				</div>
+				<div class='button-panel'>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+				</div>
+				<div class="button-container">
+					<div class='button-large'></div>
+					<div class='button-large'></div>
+				</div>
+				<div class='button-panel'>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+				</div>
+				<div class='button-panel'>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+					<div class="button"></div>
+				</div>
+			</div>
+		</div>
+		<div class="userbox resizable sidebar diary" id="leftbar" style="width: 20%;height: 50%"></div>
+		<div class="userbox resizable map-container" style="width: 60%;height: 50%;">
+			<img class="map" src="16kmd1.b.bmp">
+		</div>
+		<div class="userbox sidebar personalData" id="rightbar" style="width: 20%;"></div>
+		<div class="userbox resizableTopOnly bottombar family" id="bottombar" style="height:40%;"></div>
+		<div></div>
+		<div></div>
+	</body>
+</html>

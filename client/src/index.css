@@ -1,0 +1,98 @@
+html, body {
+	margin: 0;
+	height: 100%;
+}
+
+.userbox {
+	margin: 0;
+	float:left;
+	position: relative;
+}
+
+.topbar {
+	height:10%;
+	width: 100%;
+	background-color: gray;
+}
+.sidebar {
+	float:left;
+	height: 50%;
+	background-color: red;
+}
+.personalData {
+	background-color: #698eae;
+}
+.map-container {
+	float:left;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	background-color: green;
+	width: 60%
+}
+.map {
+	
+}
+.bottombar {
+	height: 40%;
+	width: 100%;
+	background-color: orange;
+}
+.ui-resizable-e {
+	height: 100%;
+	cursor: col-resize;
+	float: right;
+	width: 4px;
+	border: 1px dotted black;
+	right: -3px;
+	top: 0px;
+	position: absolute;
+}
+.ui-resizable-s {
+	cursor: row-resize;
+	height: 4px;
+	width: 100%;
+	bottom: -3px;
+
+	position: absolute;
+	border: 1px dotted black;
+}
+
+#leftside-topbar{
+	width:30%;
+}
+.topbar * {
+	display: inline-block;
+}
+
+#leftside-topbar {
+	position: relative;
+	height: 100%;
+}
+.button-panel {
+	float:right;
+	background-color:blue;
+	width: auto;
+	height:33.333333333%;
+	clear: right;
+}
+.dropdown-container, .button-container {
+	float:left;
+	clear: left;
+}
+.button-container {
+	height: 66.666666666666666%;
+	width: 50%;
+	background-color: green;
+}
+.button {
+	width: 15px;
+	height: 15px;
+	background:white;
+}
+.button-large {
+	width: calc(50% - 2px);
+	height:100%;
+	background: white;
+	border: 1px dotted black;
+	float:left;
+}
