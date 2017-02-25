@@ -1,19 +1,22 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="index.css">
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		<script>
+		<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script>		
 			$( function() {
 				$( ".map-container" ).resizable({
 					start: function (e, ui) {
 						
 					},
 					resize: function (e, ui) {
-						console.log($(".map-container")[0].style['height']);
+						
 						changeElementSizingToPercents(ui.element);
-						//console.log($(ui.element).width());
 
 						var mapPercentWidth = ui.element[0].style['width'].slice(0, -1)
 						
@@ -25,9 +28,7 @@
 							 $(this).resizable("option", "maxWidth", ui.size.width); 
 						}
 
-						$('#rightbar').css("width", parseFloat(rightPercentWidth) + parseFloat(difference) + "%")
-						//$('#second').css("height", height- first+ "px");
-
+						$('#rightbar').css("width", parseFloat(rightPercentWidth) + parseFloat(difference) + "%");
 						
 						var mapPercentHeight = parseFloat(ui.element[0].style['height'].slice(0, -1));
 						var topbarPercentHeight = parseFloat( $("#topbar")[0].style['height'].slice(0, -1) );
@@ -42,6 +43,7 @@
 
 						$('#rightbar').css("height", mapPercentHeight +"%");
 						$('#leftbar').css("height", mapPercentHeight + "%");
+						render();
 
 					},
 					stop: function(e, ui) {
@@ -51,16 +53,16 @@
 						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
 						var leftPercentWidth = $("#leftbar")[0].style['width'].slice(0, -1);
 						var difference = 100 - mapPercentWidth - rightPercentWidth - leftPercentWidth;
-						console.log(difference);
 						if(difference < 0)
 							$('#rightbar').css("width", parseFloat(rightPercentWidth) + parseFloat(difference) + "%")
 						$(this).resizable("option", "maxWidth", null);
+						$(this).resizable("option", "maxHeight", null); 
+						
 					}
 				});
 				$( ".diary" ).resizable({
 					resize: function (e, ui) {
 						changeElementSizingToPercents(ui.element);
-						//console.log($(ui.element).width());
 						var leftPercentWidth = ui.element[0].style['width'].slice(0, -1)
 						
 						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
@@ -72,7 +74,6 @@
 						}
 
 						$('.map-container').css("width", parseFloat(mapPercentWidth) + parseFloat(difference) + "%")
-						//$('#second').css("height", height- first+ "px");
 
 						var leftPercentHeight = parseFloat(ui.element[0].style['height'].slice(0, -1));
 						var topbarPercentHeight = parseFloat( $("#topbar")[0].style['height'].slice(0, -1) );
@@ -87,18 +88,19 @@
 
 						$('#rightbar').css("height", leftPercentHeight +"%");
 						$('.map-container').css("height", leftPercentHeight + "%");
+						render();
 					},
 					stop: function(e, ui) {
 						changeElementSizingToPercents(ui.element);
-						var leftPercentWidth = ui.element[0].style['width'].slice(0, -1)
+						var leftPercentWidth = ui.element[0].style['width'].slice(0, -1);
 						
 						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
 						var mapPercentWidth = $(".map-container")[0].style['width'].slice(0, -1);
 						var difference = 100 - mapPercentWidth - rightPercentWidth - leftPercentWidth;
-						console.log(difference);
 						if(difference < 0)
 							$('#rightbar').css("width", parseFloat(rightPercentWidth) + parseFloat(difference) + "%")
 						$(this).resizable("option", "maxWidth", null);
+						$(this).resizable("option", "maxHeight", null); 
 					}
 				});
 
@@ -109,18 +111,230 @@
 							height: element.height()/parent.height()*100+"%"
 					});
 				}
+				
+				$(document).ready(function() {
+					$('#example').DataTable({
+						"paging":   false,
+						"searching": false,
+						"info": false,
+						"scrollY": "100%",
+						"scrollCollapse": true
+					});
+					var options = [];
+
+					$( '.dropdown-menu a' ).on( 'click', function( event ) {
+						var $target = $( event.currentTarget ),
+						val = $target.attr( 'data-value' ),
+						$inp = $target.find( 'input' ),
+						idx;
+						
+						if ( ( idx = options.indexOf( val ) ) > -1 ) {
+							options.splice( idx, 1 );
+							setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+						} else {
+							options.push( val );
+							setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+						}
+						$( event.target ).blur();
+						
+						console.log( options );
+						return false;
+					});
+				
+					
+				});
 			});
+	</script>
+	<script>
+	var canvas, ctx, render;
+	$(document).ready(function() {
+		canvas = document.getElementById('viewport');
+		ctx = canvas.getContext('2d');
+		
+		var img = "16kmd1.b.bmp";
+		base_image = new Image();
+		base_image.src = img;
+		base_image.onload = function(){
+			ctx.drawImage(base_image, 0, 0);
+			map.img = base_image;
+			map.height = base_image.height;
+			map.width = base_image.width;
+		}
+		
+		var canvasOffset=$("#viewport").offset();
+		var offsetX=canvasOffset.left;
+		var offsetY=canvasOffset.top;
+		var canvasWidth=canvas.width;
+		var canvasHeight=canvas.height;
+		var isDragging=false;
+		canvas.width = canvas.offsetWidth;
+		canvas.height = canvas.offsetHeight;
+		
+		function handleMouseDown(e){
+			
+			canMouseX=parseInt(e.clientX-offsetX);
+			canMouseY=parseInt(e.clientY-offsetY);
+			mouseOnImageOffsetX = canMouseX - map.x;
+			mouseOnImageOffsetY = canMouseY - map.y;
+			
+			// set the drag flag
+			isDragging=true;
+			canvas.style.cursor = "move";
+			event.preventDefault();
+		}
+		
+		function handleMouseUp(e){
+			canvas.style.cursor = "";
+			canMouseX=parseInt(e.clientX-offsetX);
+			canMouseY=parseInt(e.clientY-offsetY);
+			// clear the drag flag
+			isDragging=false;
+		}
+		
+		function handleMouseOut(e){
+			canvas.style.cursor = "";
+			// user has left the canvas, so clear the drag flag
+			isDragging=false;
+		}
+		
+		function handleMouseMove(e){
+		
+			
+			
+			// if the drag flag is set, clear the canvas and draw the image
+			if(isDragging){
+				canMouseX=parseInt(e.clientX-offsetX);
+				canMouseY=parseInt(e.clientY-offsetY);
+				//console.log(canMouseX, canMouseY)
+				render();
+			}
+			event.preventDefault();
+		}
+		render = function render () {
+			canvas.width = canvas.offsetWidth;
+			canvas.height = canvas.offsetHeight;
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			
+			
+			map.x = canMouseX - mouseOnImageOffsetX;
+			
+			map.y = canMouseY - mouseOnImageOffsetY;
+			ctx.drawImage(base_image, map.x, map.y);
+		};
+		
+		var map = {
+			height: 0,
+			width: 0,
+			x: 0,
+			y: 0,
+			img: null
+		}
+		
+		$("#viewport").mousedown(function(e){handleMouseDown(e);}.bind(this));
+		$("#viewport").mousemove(function(e){handleMouseMove(e);}.bind(this));
+		$("#viewport").mouseup(function(e){handleMouseUp(e);}.bind(this));
+		$("#viewport").mouseout(function(e){handleMouseOut(e);}.bind(this));	
+	});
 	</script>
 	</head>
 	<body>
 		<div class="userbox topbar" id="topbar" style="height:10%;">
 			<div id='leftside-topbar'>
 				<div class="dropdown-container">
-					<div class="dropdown-button">Life</div>
-					<div class="dropdown-button">Edit</div>
-					<div class="dropdown-button">Actions</div>
-					<div class="dropdown-button">View</div>
-					<div class="dropdown-button">Help</div>
+					<div class="dropdown-button dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Life</button>
+						<ul class="dropdown-menu">
+							<li><a href="#">New</a></li>
+							<li><a href="#">Character Designer</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Age A Year</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Open</a></li>
+							<li><a href="#">Save</a></li>
+							<li><a href="#">Save As</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Revert to Age</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Print</a></li>
+							<li><a href="#">Printer Setup</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Configure Issues</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Exit</a></li>
+						</ul>
+					</div>
+					<div class="dropdown-button dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Edit</button>
+						<ul class="dropdown-menu">
+							<li><a href="#">Copy</a></li>
+						</ul>
+					</div>
+						
+					<div class="dropdown-button dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions</button>
+						<ul class="dropdown-menu">
+							<li class="dropdown-submenu">
+								<a class="test" tabindex="-1" href="#">Love and Relationships<span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a tabindex="-1" href="#">Seek New Romance</a></li>
+									<li><a tabindex="-1" href="#">End Romance</a></li>
+									<li><a tabindex="-1" href="#">Propose Marriage</a></li>
+									<li><a tabindex="-1" href="#">Leave Marriage</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="#">Try to Have a Child</a></li>
+									<li><a tabindex="-1" href="#">Adopt a Child</a></li>
+								</ul>
+							</li>
+							<li class="dropdown-submenu">
+								<a class="test" tabindex="-1" href="#">Finances<span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a tabindex="-1" href="#">Monthly Expenses</a></li>
+									<li><a tabindex="-1" href="#">Borrow or Invest</a></li>
+								</ul>
+							</li>
+							<li class="dropdown-submenu">
+								<a class="test" tabindex="-1" href="#">School or Career<span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a tabindex="-1" href="#">Quit School</a></li>
+									<li><a tabindex="-1" href="#">Enroll in College</a></li>
+									<li><a tabindex="-1" href="#">Enroll in Vocational School</a></li>
+									<li><a tabindex="-1" href="#">Enroll in Graduate School</a></li>
+									<li class="divider"></li>
+									<li><a tabindex="-1" href="#">Quit Job</a></li>
+									<li><a tabindex="-1" href="#">Get a Job or Change Jobs</a></li>
+									<li><a tabindex="-1" href="#">Work Overtime</a></li>
+									<li><a tabindex="-1" href="#">Ask for a Raise</a></li>
+								</ul>
+							</li>
+							<li class="dropdown-submenu">
+								<a class="test" tabindex="-1" href="#">Residence<span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a tabindex="-1" href="#">Move Out/Establish Household</a></li>
+									<li><a tabindex="-1" href="#">Change City of Residence</a></li>
+									<li><a tabindex="-1" href="#">Change Dwelling</a></li>
+									<li><a tabindex="-1" href="#">Emigrate</a></li>
+								</ul>
+							</li>
+							<li><a href="#">Leisure Activities</a></li>
+						</ul>
+					</div>
+					<div class="dropdown-button dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">View</button>
+						<ul class="dropdown-menu">
+							<li><a href="#" class="small" data-value="diaryVisible" tabIndex="-1"><input type="checkbox"/>&nbsp;Diary</a></li>
+							<li><a href="#" class="small" data-value="familyVisible" tabIndex="-1"><input type="checkbox"/>&nbsp;Family</a></li>
+							<li><a href="#" class="small" data-value="personalDataVisible" tabIndex="-1"><input type="checkbox"/>&nbsp;Personal Data</a></li>
+							<li class="divider"></li>
+							<li><a tabindex="-1" href="#">Zoom In</a></li>
+							<li><a tabindex="-1" href="#">Zoom Out</a></li>
+						</ul>
+					</div>
+					<div class="dropdown-button dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Help</button>
+						<ul class="dropdown-menu">
+							<li><a tabindex="-1" href="#">About Real Lives</a></li>
+						</ul>
+					</div>
 				</div>
 				<div class='button-panel'>
 					<div class="button"></div>
@@ -131,8 +345,8 @@
 					<div class="button"></div>
 				</div>
 				<div class="button-container">
-					<div class='button-large'></div>
-					<div class='button-large'></div>
+					<div class='button-large'>Age A Year</div>
+					<div class='button-large'>Revert to Age</div>
 				</div>
 				<div class='button-panel'>
 					<div class="button"></div>
@@ -152,12 +366,78 @@
 				</div>
 			</div>
 		</div>
-		<div class="userbox resizable sidebar diary" id="leftbar" style="width: 20%;height: 50%"></div>
+		<div class="userbox resizable sidebar diary" id="leftbar" style="width: 20%;height: 50%">
+			<textarea></textarea>
+		</div>
 		<div class="userbox resizable map-container" style="width: 60%;height: 50%;">
-			<img class="map" src="16kmd1.b.bmp">
+			
+			<canvas id="viewport" class="map"></canvas>
 		</div>
 		<div class="userbox sidebar personalData" id="rightbar" style="width: 20%;"></div>
-		<div class="userbox resizableTopOnly bottombar family" id="bottombar" style="height:40%;"></div>
+		<div class="userbox resizableTopOnly bottombar family" id="bottombar" style="height:40%;">
+			<table id="example" class="display" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Tiger Nixon</td>
+						<td>System Architect</td>
+						<td>Edinburgh</td>
+						<td>61</td>
+						<td>2011/04/25</td>
+						<td>$320,800</td>
+					</tr>
+					<tr>
+						<td>Garrett Winters</td>
+						<td>Accountant</td>
+						<td>Tokyo</td>
+						<td>63</td>
+						<td>2011/07/25</td>
+						<td>$170,750</td>
+					</tr>
+					<tr>
+						<td>Ashton Cox</td>
+						<td>Junior Technical Author</td>
+						<td>San Francisco</td>
+						<td>66</td>
+						<td>2009/01/12</td>
+						<td>$86,000</td>
+					</tr>
+					<tr>
+						<td>Cedric Kelly</td>
+						<td>Senior Javascript Developer</td>
+						<td>Edinburgh</td>
+						<td>22</td>
+						<td>2012/03/29</td>
+						<td>$433,060</td>
+					</tr>
+					<tr>
+						<td>Airi Satou</td>
+						<td>Accountant</td>
+						<td>Tokyo</td>
+						<td>33</td>
+						<td>2008/11/28</td>
+						<td>$162,700</td>
+					</tr>
+					<tr>
+						<td>Brielle Williamson</td>
+						<td>Integration Specialist</td>
+						<td>New York</td>
+						<td>61</td>
+						<td>2012/12/02</td>
+						<td>$372,000</td>
+					</tr>
+					</tbody>
+			</table>
+		</div>
 		<div></div>
 		<div></div>
 	</body>
