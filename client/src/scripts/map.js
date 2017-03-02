@@ -22,6 +22,8 @@ console.log('hey');
 		var canvasWidth=canvas.width;
 		var canvasHeight=canvas.height;
 		var isDragging=false;
+		var canMouseX = 0;
+		var canMouseX = 0;
 		canvas.width = canvas.offsetWidth;
 		canvas.height = canvas.offsetHeight;
 		gui.init();
@@ -67,8 +69,6 @@ console.log('hey');
 			canvas.width = canvas.offsetWidth;
 			canvas.height = canvas.offsetHeight;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			canMouseX = canMouseX || 0;
-			canMouseY = canMouseY || 0;
 			map.x = canMouseX - mouseOnImageOffsetX;
 			map.y = canMouseY - mouseOnImageOffsetY;
 			
