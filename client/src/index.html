@@ -8,234 +8,19 @@
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script>		
-			$( function() {
-				$( ".map-container" ).resizable({
-					start: function (e, ui) {
-						
-					},
-					resize: function (e, ui) {
-						
-						changeElementSizingToPercents(ui.element);
-
-						var mapPercentWidth = ui.element[0].style['width'].slice(0, -1)
-						
-						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
-						var leftPercentWidth = $("#leftbar")[0].style['width'].slice(0, -1);
-						var difference = 100 - mapPercentWidth - rightPercentWidth - leftPercentWidth;
-						if(rightPercentWidth < 5)
-						{
-							 $(this).resizable("option", "maxWidth", ui.size.width); 
-						}
-
-						$('#rightbar').css("width", parseFloat(rightPercentWidth) + parseFloat(difference) + "%");
-						
-						var mapPercentHeight = parseFloat(ui.element[0].style['height'].slice(0, -1));
-						var topbarPercentHeight = parseFloat( $("#topbar")[0].style['height'].slice(0, -1) );
-						var bottombarPercentHeight = parseFloat( $("#bottombar")[0].style['height'].slice(0, -1) );
-						var difference = 100 - mapPercentHeight - topbarPercentHeight - bottombarPercentHeight;
-						if(bottombarPercentHeight < 5)
-						{
-							 $(this).resizable("option", "maxHeight", ui.size.height); 
-						}
-
-						$('#bottombar').css("height", bottombarPercentHeight + difference + "%");
-
-						$('#rightbar').css("height", mapPercentHeight +"%");
-						$('#leftbar').css("height", mapPercentHeight + "%");
-						render();
-
-					},
-					stop: function(e, ui) {
-						changeElementSizingToPercents(ui.element);
-						var mapPercentWidth = ui.element[0].style['width'].slice(0, -1)
-						
-						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
-						var leftPercentWidth = $("#leftbar")[0].style['width'].slice(0, -1);
-						var difference = 100 - mapPercentWidth - rightPercentWidth - leftPercentWidth;
-						if(difference < 0)
-							$('#rightbar').css("width", parseFloat(rightPercentWidth) + parseFloat(difference) + "%")
-						$(this).resizable("option", "maxWidth", null);
-						$(this).resizable("option", "maxHeight", null); 
-						
-					}
-				});
-				$( ".diary" ).resizable({
-					resize: function (e, ui) {
-						changeElementSizingToPercents(ui.element);
-						var leftPercentWidth = ui.element[0].style['width'].slice(0, -1)
-						
-						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
-						var mapPercentWidth = $(".map-container")[0].style['width'].slice(0, -1);
-						var difference = 100 - parseFloat(mapPercentWidth) - parseFloat(rightPercentWidth) - parseFloat(leftPercentWidth);
-						if(mapPercentWidth < 5)
-						{
-							 $(this).resizable("option", "maxWidth", ui.size.width); 
-						}
-
-						$('.map-container').css("width", parseFloat(mapPercentWidth) + parseFloat(difference) + "%")
-
-						var leftPercentHeight = parseFloat(ui.element[0].style['height'].slice(0, -1));
-						var topbarPercentHeight = parseFloat( $("#topbar")[0].style['height'].slice(0, -1) );
-						var bottombarPercentHeight = parseFloat( $("#bottombar")[0].style['height'].slice(0, -1) );
-						var difference = 100 - leftPercentHeight - topbarPercentHeight - bottombarPercentHeight;
-						if(bottombarPercentHeight < 5)
-						{
-							 $(this).resizable("option", "maxHeight", ui.size.height); 
-						}
-
-						$('#bottombar').css("height", bottombarPercentHeight + difference + "%");
-
-						$('#rightbar').css("height", leftPercentHeight +"%");
-						$('.map-container').css("height", leftPercentHeight + "%");
-						render();
-					},
-					stop: function(e, ui) {
-						changeElementSizingToPercents(ui.element);
-						var leftPercentWidth = ui.element[0].style['width'].slice(0, -1);
-						
-						var rightPercentWidth = $("#rightbar")[0].style['width'].slice(0, -1);
-						var mapPercentWidth = $(".map-container")[0].style['width'].slice(0, -1);
-						var difference = 100 - mapPercentWidth - rightPercentWidth - leftPercentWidth;
-						if(difference < 0)
-							$('#rightbar').css("width", parseFloat(rightPercentWidth) + parseFloat(difference) + "%")
-						$(this).resizable("option", "maxWidth", null);
-						$(this).resizable("option", "maxHeight", null); 
-					}
-				});
-
-				function changeElementSizingToPercents(element){
-					var parent = element.parent();
-						element.css({
-							width: element.width()/parent.width()*100+"%",
-							height: element.height()/parent.height()*100+"%"
-					});
-				}
-				
-				$(document).ready(function() {
-					$('#example').DataTable({
-						"paging":   false,
-						"searching": false,
-						"info": false,
-						"scrollY": "100%",
-						"scrollCollapse": true
-					});
-					var options = [];
-
-					$( '.dropdown-menu a' ).on( 'click', function( event ) {
-						var $target = $( event.currentTarget ),
-						val = $target.attr( 'data-value' ),
-						$inp = $target.find( 'input' ),
-						idx;
-						
-						if ( ( idx = options.indexOf( val ) ) > -1 ) {
-							options.splice( idx, 1 );
-							setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
-						} else {
-							options.push( val );
-							setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
-						}
-						$( event.target ).blur();
-						
-						console.log( options );
-						return false;
-					});
-				
-					
-				});
-			});
-	</script>
+		<script src="scripts/gui.js"></script>
+		<script src="scripts/map.js"></script>
+		<script src="scripts/tables.js"></script>
 	<script>
-	var canvas, ctx, render;
-	$(document).ready(function() {
-		canvas = document.getElementById('viewport');
-		ctx = canvas.getContext('2d');
-		
-		var img = "16kmd1.b.bmp";
-		base_image = new Image();
-		base_image.src = img;
-		base_image.onload = function(){
-			ctx.drawImage(base_image, 0, 0);
-			map.img = base_image;
-			map.height = base_image.height;
-			map.width = base_image.width;
-		}
-		
-		var canvasOffset=$("#viewport").offset();
-		var offsetX=canvasOffset.left;
-		var offsetY=canvasOffset.top;
-		var canvasWidth=canvas.width;
-		var canvasHeight=canvas.height;
-		var isDragging=false;
-		canvas.width = canvas.offsetWidth;
-		canvas.height = canvas.offsetHeight;
-		
-		function handleMouseDown(e){
-			
-			canMouseX=parseInt(e.clientX-offsetX);
-			canMouseY=parseInt(e.clientY-offsetY);
-			mouseOnImageOffsetX = canMouseX - map.x;
-			mouseOnImageOffsetY = canMouseY - map.y;
-			
-			// set the drag flag
-			isDragging=true;
-			canvas.style.cursor = "move";
-			event.preventDefault();
-		}
-		
-		function handleMouseUp(e){
-			canvas.style.cursor = "";
-			canMouseX=parseInt(e.clientX-offsetX);
-			canMouseY=parseInt(e.clientY-offsetY);
-			// clear the drag flag
-			isDragging=false;
-		}
-		
-		function handleMouseOut(e){
-			canvas.style.cursor = "";
-			// user has left the canvas, so clear the drag flag
-			isDragging=false;
-		}
-		
-		function handleMouseMove(e){
-		
-			
-			
-			// if the drag flag is set, clear the canvas and draw the image
-			if(isDragging){
-				canMouseX=parseInt(e.clientX-offsetX);
-				canMouseY=parseInt(e.clientY-offsetY);
-				//console.log(canMouseX, canMouseY)
-				render();
-			}
-			event.preventDefault();
-		}
-		render = function render () {
-			canvas.width = canvas.offsetWidth;
-			canvas.height = canvas.offsetHeight;
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			
-			
-			map.x = canMouseX - mouseOnImageOffsetX;
-			
-			map.y = canMouseY - mouseOnImageOffsetY;
-			ctx.drawImage(base_image, map.x, map.y);
-		};
-		
-		var map = {
-			height: 0,
-			width: 0,
-			x: 0,
-			y: 0,
-			img: null
-		}
-		
-		$("#viewport").mousedown(function(e){handleMouseDown(e);}.bind(this));
-		$("#viewport").mousemove(function(e){handleMouseMove(e);}.bind(this));
-		$("#viewport").mouseup(function(e){handleMouseUp(e);}.bind(this));
-		$("#viewport").mouseout(function(e){handleMouseOut(e);}.bind(this));	
-	});
+		var canvas, ctx, render, gui;
+
+
+		$(document).ready(function() {
+			gui = new Gui($(".map-container"), $("#rightbar"), $("#leftbar"), $("#bottombar"), render);
+			gui.init();
+		});
 	</script>
+
 	</head>
 	<body>
 		<div class="userbox topbar" id="topbar" style="height:10%;">
@@ -269,7 +54,7 @@
 							<li><a href="#">Copy</a></li>
 						</ul>
 					</div>
-						
+
 					<div class="dropdown-button dropdown">
 						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions</button>
 						<ul class="dropdown-menu">
@@ -370,7 +155,7 @@
 			<textarea></textarea>
 		</div>
 		<div class="userbox resizable map-container" style="width: 60%;height: 50%;">
-			
+
 			<canvas id="viewport" class="map"></canvas>
 		</div>
 		<div class="userbox sidebar personalData" id="rightbar" style="width: 20%;"></div>
