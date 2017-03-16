@@ -25,18 +25,26 @@
 			*/
 			$("#viewport").bind('touchstart mousedown', function(e) {
 				e.preventDefault();
+				e.clientX = (typeof e.clientX === 'number') ? e.clientX : e.originalEvent.changedTouches[0].clientX;
+				e.clientY = (typeof e.clientY === 'number') ? e.clientY : e.originalEvent.changedTouches[0].clientY;
 				handleMouseDown(e);
 			}.bind(this));
 			$("#viewport").bind('touchmove mousemove', function(e) {
 				e.preventDefault();
+				e.clientX = (typeof e.clientX === 'number') ? e.clientX : e.originalEvent.changedTouches[0].clientX;
+				e.clientY = (typeof e.clientY === 'number') ? e.clientY : e.originalEvent.changedTouches[0].clientY;
 				handleMouseMove(e);
 			}.bind(this));
 			$("#viewport").bind('touchend mouseup', function(e) {
 				e.preventDefault();
+				e.clientX = (typeof e.clientX === 'number') ? e.clientX : e.originalEvent.changedTouches[0].clientX;
+				e.clientY = (typeof e.clientY === 'number') ? e.clientY : e.originalEvent.changedTouches[0].clientY;
 				handleMouseUp(e);
 			}.bind(this));
 			$("#viewport").bind('touchcancel mouseout', function(e) {
 				e.preventDefault();
+				e.clientX = (typeof e.clientX === 'number') ? e.clientX : e.originalEvent.changedTouches[0].clientX;
+				e.clientY = (typeof e.clientY === 'number') ? e.clientY : e.originalEvent.changedTouches[0].clientY;
 				handleMouseOut(e);
 			}.bind(this));
 		});
