@@ -17,11 +17,28 @@
 
 		$(document).ready(function() {
 			gui = new Gui($(".map-container"), $("#rightbar"), $("#leftbar"), $("#bottombar"), render);
-			gui.init();
+			gui.init();/*
 			$("#viewport").mousedown(function(e){handleMouseDown(e);}.bind(this));
 			$("#viewport").mousemove(function(e){handleMouseMove(e);}.bind(this));
 			$("#viewport").mouseup(function(e){handleMouseUp(e);}.bind(this));
 			$("#viewport").mouseout(function(e){handleMouseOut(e);}.bind(this));
+			*/
+			$("#viewport").bind('touchstart mousedown', function(e) {
+				e.preventDefault();
+				handleMouseDown(e);
+			}.bind(this));
+			$("#viewport").bind('touchmove mousemove', function(e) {
+				e.preventDefault();
+				handleMouseMove(e);
+			}.bind(this));
+			$("#viewport").bind('touchend mouseup', function(e) {
+				e.preventDefault();
+				handleMouseUp(e);
+			}.bind(this));
+			$("#viewport").bind('touchcancel mouseout', function(e) {
+				e.preventDefault();
+				handleMouseOut(e);
+			}.bind(this));
 		});
 	</script>
 
