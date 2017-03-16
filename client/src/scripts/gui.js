@@ -7,6 +7,7 @@ function Gui (mapContainer, rightBar, leftBar, bottomBar, render) {
 }
 
 Gui.prototype.init = function init () {
+	mapinit();
 	this.mapContainer.resizable({
 		resize: function (e, ui) {
 			
