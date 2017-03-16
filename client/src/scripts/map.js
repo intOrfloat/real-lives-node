@@ -63,6 +63,7 @@ function handleMouseOut(e) {
 
 function handleMouseMove(e) {
 	// if the drag flag is set, clear the canvas and draw the image
+	$(".diary textarea").text(e.clientX + " " + e.clientY + " is dragging " + isDragging);
 	if(isDragging){
 		canMouseX=parseInt(e.clientX-offsetX);
 		canMouseY=parseInt(e.clientY-offsetY);
