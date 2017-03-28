@@ -1,13 +1,13 @@
-function Gui (mapContainer, rightBar, leftBar, bottomBar, render) {
+function Gui (mapContainer, rightBar, leftBar, bottomBar) {
 	this.mapContainer = mapContainer;
 	this.rightBar = rightBar;
 	this.leftBar = leftBar;
 	this.bottomBar = bottomBar;
-	this.render = render;
+	this.Map = new Map();
 }
 
 Gui.prototype.init = function init () {
-	mapinit();
+	this.Map.init();
 	this.mapContainer.resizable({
 		resize: function (e, ui) {
 			
@@ -38,7 +38,7 @@ Gui.prototype.init = function init () {
 
 			this.rightBar.css("height", mapPercentHeight +"%");
 			this.leftBar.css("height", mapPercentHeight + "%");
-			this.render();
+			this.Map.render();
 
 		}.bind(this),
 		stop: function(e, ui) {
@@ -83,7 +83,7 @@ Gui.prototype.init = function init () {
 
 			this.rightBar.css("height", leftPercentHeight +"%");
 			this.mapContainer.css("height", leftPercentHeight + "%");
-			this.render();
+			this.Map.render();
 		}.bind(this),
 		stop: function(e, ui) {
 			changeElementSizingToPercents(ui.element);

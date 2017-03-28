@@ -8,47 +8,18 @@
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script src="scripts/gui.js"></script>
-		<script src="scripts/map.js"></script>
+		<script src="scripts/gui.js?v=1"></script>
+		<script src="scripts/map.js?v=2"></script>
 		<script src="scripts/tables.js"></script>
 	<script>
-		var canvas, ctx, render, gui;
-
-
 		$(document).ready(function() {
-			gui = new Gui($(".map-container"), $("#rightbar"), $("#leftbar"), $("#bottombar"), render);
-			gui.init();/*
-			$("#viewport").mousedown(function(e){handleMouseDown(e);}.bind(this));
-			$("#viewport").mousemove(function(e){handleMouseMove(e);}.bind(this));
-			$("#viewport").mouseup(function(e){handleMouseUp(e);}.bind(this));
-			$("#viewport").mouseout(function(e){handleMouseOut(e);}.bind(this));
-			*/
-			$("#viewport").bind('touchstart mousedown', function(e) {
-				e.preventDefault();
-				
-				e.clientX = (typeof e.clientX === 'number') ? e.clientX : e.originalEvent.changedTouches[0].clientX;
-				e.clientY = (typeof e.clientY === 'number') ? e.clientY : e.originalEvent.changedTouches[0].clientY;
-				handleMouseDown(e);
-			}.bind(this));
-			$("#viewport").bind('touchmove mousemove', function(e) {
-				e.preventDefault();
-				e.clientX = (typeof e.clientX === 'number') ? e.clientX : e.originalEvent.changedTouches[0].clientX;
-				e.clientY = (typeof e.clientY === 'number') ? e.clientY : e.originalEvent.changedTouches[0].clientY;
-				handleMouseMove(e);
-			}.bind(this));
-			$("#viewport").bind('touchend mouseup', function(e) {
-				e.preventDefault();
-				e.clientX = (typeof e.clientX === 'number') ? e.clientX : e.originalEvent.changedTouches[0].clientX;
-				e.clientY = (typeof e.clientY === 'number') ? e.clientY : e.originalEvent.changedTouches[0].clientY;
-				handleMouseUp(e);
-			}.bind(this));
-			$("#viewport").bind('touchcancel mouseout', function(e) {
-				e.preventDefault();
-				e.clientX = (typeof e.clientX === 'number') ? e.clientX : e.originalEvent.changedTouches[0].clientX;
-				e.clientY = (typeof e.clientY === 'number') ? e.clientY : e.originalEvent.changedTouches[0].clientY;
-				handleMouseOut(e);
-			}.bind(this));
-		});
+			
+			var gui = new Gui($(".map-container"), $("#rightbar"), $("#leftbar"), $("#bottombar"));
+			
+			gui.init();
+
+			//  $(".diary textarea").text("asdfasdf" + Gui );
+		}.bind(this));
 	</script>
 
 	</head>
